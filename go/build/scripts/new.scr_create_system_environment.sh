@@ -3,28 +3,28 @@
 # =============================================================================================== #
 # > The script was developed with strong POSIX concept                                            #
 # =============================================================================================== #
-# SUPERVISOR:    Morris  			PROGRAMMER:    Morris 	                          #
+# SUPERVISOR:    Morris                         PROGRAMMER:    Morris                             #
 # ----------------------------------------------------------------------------------------------- #
 #                                                                                                 #
-# FILE:			scr_create_environment_directories.sh                                     #
+# FILE:                 scr_create_environment_directories.sh                                     #
 #                                                                                                 #
-# DESCRIPTION:		This script creates the working directories for system                    #
+# DESCRIPTION:          This script creates the working directories for system                    #
 #                                                                                                 #
 # ARGUMENTS:                                                                                      #
 #        params#        description:                                                              #
 #        $1                     environment                                                       #
 #                                                                                                 #
-# INPUT FORMAT:											  #
+# INPUT FORMAT:                                                                                   #
 #                                                                                                 #
-# OUTPUT FORMAT:										  #
-#												  #
-# IMPLEMENTATION:										  #
-# 			scr_create_environment_directories                                        #
+# OUTPUT FORMAT:                                                                                  #
 #                                                                                                 #
-#												  #
-# DATE:			NAME:		MODIFICATION DESCRIPTION		                  #
+# IMPLEMENTATION:                                                                                 #
+#                       scr_create_environment_directories                                        #
+#                                                                                                 #
+#                                                                                                 #
+# DATE:                 NAME:           MODIFICATION DESCRIPTION                                  #
 #     14-12-2023            Morris          Created                                               #
-#												  #
+#                                                                                                 #
 # =============================================================================================== #
 
 # Function Declarations
@@ -78,72 +78,86 @@ function Exit_With_Error_Internal()
 #clear
 echo
 
+
 # Initializations Parameters
 # ==========================
-EXIT_CODE_20=20		# Init script not found
-EXIT_CODE_21=21		# General error
+EXIT_CODE_20=20         # Init script not found
+EXIT_CODE_21=21         # General error
 
 # Base variables path
 # -------------------
-ENV="$USERNAME"
+ENV="$USER"
 BASE_PATH="`echo ~`"
 CURR_RELATIVE_PATH="~${PWD:${#BASE_PATH}}"
 FULL_PATH="$BASE_PATH/${CURR_RELATIVE_PATH:1}"
-MY_CURR_DIR="`basename $FULL_PATH`"
+CURR_DIR="`basename $FULL_PATH`"
+
 
 echo " . . . . . . . . . . . . . . . . . . . "
 echo "[ENVIRONMENT: #]         ~>: $ENV"
 echo "[BASE_PATH: #]           ~>: $BASE_PATH"
 echo "[CURR_RELATIVE_PATH: #]  ~>: $CURR_RELATIVE_PATH"
 echo "[FULL_PATH: #]           ~>: $FULL_PATH"
-echo "[CURRENT_DIRECTORY: #]   ~>: $MY_CURR_DIR"
+echo "[CURRENT_DIRECTORY: #]   ~>: $CURR_DIR"
 echo " . . . . . . . . . . . . . . . . . . . "
-
 
 # Internal usage variables
 # ------------------------
-
 echo
 echo "==============================================================================="
 echo "~> This script creates the environment working directories for the system"
 echo "==============================================================================="
+echo
 
-
-if [ -z $1 ];
-then
-	echo "The system directory creates with default: $ENV evironment."
+# Check if a custom environment is provided
+if [ -z "$1" ]; then
+	echo "Trying to create with the default $ENV environment."
 else
-	echo "The system directory creates with custom $1 environment."
-	ENV=$1
+	if [ $1 = $ENV ]; then
+		echo "Trying to create with the default $ENV environment."
+	else
+		echo "Trying to create with a custom $1 environment."
+		ENV="$1"
+
+	fi
+
+#ls -1 ./ | grep $ENV
 fi
 
+echo
+echo "$CURR_RELATIVE_PATH/"
+#echo "$CURR_RELATIVE_PATH/$ENV"
 
 
+ENV_LEN=${#ENV}
+for dir in `ls -1`;
+do
+	if [ -d "$dir" ];
+	then
+		CURR_LEN=${#dir}
+
+		if [ "$CURR_LEN" -eq "$ENV_LEN" ] && [ $dir = $ENV ]; then
+			echo "$CURR_RELATIVE_PATH/$ENV"
+			echo "Environment $ENV already exists. Exiting the script."
+			echo
+
+			#Exit_With_Error_Internal 23
+			exit 0
+		fi
+	fi
+done
+
+# Check if a custom environment is provided
+if [ -z "$1" ]; then
+	echo "The system directory is created with the default $ENV environment."
+else
+	echo "The system directory is created with a custom $1 environment."
+fi
+echo "$CURR_RELATIVE_PATH/$ENV"
+
+# Running
+eval "mkdir -p $CURR_RELATIVE_PATH/$ENV/{bin,build/{make,scripts,sources,git-source,},tmp,logs,}"
+echo "New directory environment $ENV was created:"
+tree $ENV
 echo
 echo
-echo
-echo "Creating directories for system:"
-#mkdir -p $USER/{bin,build/{git-sources,make,scripts/{sh_lib,init_env,},sources/{ExtData,lib,},},logs,src,tmp,}
-
-#mkdir -p $ENV/{bin,build/{git-sources,make,scripts/{sh_lib,init_env,},sources/{ExtData,lib,},},logs,src,tmp,}
-echo "Directory for system creates successfuly"
-
-echo
-#tree $ENV
-ls -l $ENV/*
-
-echo
-echo "Prepare to create system directory for git-source..."
-#mkdir -p $USER/build/git-sources/{$USER/{bin,build/{git-sources,make,scripts/{sh_lib,init_env,},sources/{ExtData,lib,},},logs,src,tmp,},}
-
-#mkdir -p $ENV/build/git-sources/{$ENV/{bin,build/{git-sources,make,scripts/{sh_lib,init_env,},sources/{ExtData,lib,},},logs,src,tmp,},}
-echo "System directories for git-sources was created successfuly"
-
-echo
-#tree $ENV
-ls -l */
-
-
-echo
-echo
-
