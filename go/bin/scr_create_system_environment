@@ -52,7 +52,6 @@ Exit_With_Error_Internal()
 			echo "ERROR: $1"
 	        	echo "Details:"
 			echo "Environment $ENV already exists. Exiting the script."
-        	    	echo -e "$3"
 			exit $1
 			;;
 
@@ -60,10 +59,6 @@ Exit_With_Error_Internal()
 			echo "ERROR: Unknown error ($1)"
 			;;
 	esac
-
-	#local error_message="$1"
-	#echo "Ошибка: $error_message" >&2  # Выводим сообщение об ошибке в stderr
-	#exit 1  # Завершаем выполнение скрипта с кодом ошибки 1
 }
 
 #clear
