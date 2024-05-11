@@ -37,11 +37,11 @@
 #--------------------------------------------------------------------------------------------------#
 # RUN SCRIPT
 # ----------
-echo 'ssh-keygen -t rsa -b 4096 -C morris.elkanaev@gmail.com'
+echo 'ssh-keygen -t rsa -b 4096 -C email@gmail.com'
 echo "======================================================"
-echo ssh-keygen -t rsa -b 4096 -C morris.elkanaev@gmail.com
+echo ssh-keygen -t rsa -b 4096 -C email@gmail.com
 echo "------------------------------------------------------"
-ssh-keygen -t rsa -b 4096 -C morris.elkanaev@gmail.com
+ssh-keygen -t rsa -b 4096 -C email@gmail.com
 
 # RAW INFORMATION
 # ---------------
